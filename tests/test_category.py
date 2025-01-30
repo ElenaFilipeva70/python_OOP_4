@@ -32,3 +32,8 @@ def test_category_add_product(first_category: Category) -> None:
     assert len(first_category.products_in_list) == 3
     first_category.add_product(product)
     assert len(first_category.products_in_list) == 4
+
+
+def test_category_str(second_category: Category) -> None:
+    """Тестируем строковое отображение товаров в категории"""
+    assert str(second_category) == "Телевизоры, количество продуктов: 7 шт."

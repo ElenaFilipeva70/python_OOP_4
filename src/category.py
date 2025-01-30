@@ -18,13 +18,13 @@ class Category:
         Category.product_count += len(products)
         Category.products_list.extend(products)
 
-
-    def __str__(self):
+    def __str__(self) -> str:
+        """Метод, который возвращает строку в следующем виде:
+        *Название категории, количество продуктов: 200 шт.*"""
         quantity_sum = 0
         for product in self.__products:
             quantity_sum += product.quantity
         return f"{self.name}, количество продуктов: {quantity_sum} шт."
-
 
     def add_product(self, product: Product) -> None:
         """Метод для добавления продукта в атрибут products"""
