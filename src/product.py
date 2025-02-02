@@ -13,6 +13,15 @@ class Product:
         self.__price = price
         self.quantity = quantity
 
+    def __str__(self) -> str:
+        """Метод, который возвращает строку в следующем виде:
+        *Название продукта, 80 руб. Остаток: 15 шт.*"""
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other: "Product") -> float:
+        """Метод для получения полной стоимости всех выбранных товаров на складе"""
+        return self.__price * self.quantity + other.__price * other.quantity
+
     @classmethod
     def new_product(cls, product_dict: dict, products_list: List["Product"]) -> "Product":
         """Класс-метод, который принимает на вход параметры товара в словаре и возвращает
