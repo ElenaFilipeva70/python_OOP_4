@@ -84,3 +84,13 @@ def test_product_price_setter_no(capsys: CaptureFixture[str], product: Product) 
         assert "Вы действительно хотите изменить цену на меньшую? (y/n)" in captured.out
         assert f"Цена не была изменена, она осталась {product.price}" in captured.out
         assert product.price == 180000.0
+
+
+def test_product_str(product: Product) -> None:
+    """Тестируем строковое отображение продукта"""
+    assert str(product) == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
+
+
+def test_product_add(product: Product, other_product: Product) -> None:
+    """Тестируем метод получения полной стоимости всех выбранных товаров на складе"""
+    assert product + other_product == 2580000

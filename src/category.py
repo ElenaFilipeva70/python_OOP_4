@@ -18,6 +18,14 @@ class Category:
         Category.product_count += len(products)
         Category.products_list.extend(products)
 
+    def __str__(self) -> str:
+        """Метод, который возвращает строку в следующем виде:
+        *Название категории, количество продуктов: 200 шт.*"""
+        quantity_sum = 0
+        for product in self.__products:
+            quantity_sum += product.quantity
+        return f"{self.name}, количество продуктов: {quantity_sum} шт."
+
     def add_product(self, product: Product) -> None:
         """Метод для добавления продукта в атрибут products"""
         self.__products.append(product)
@@ -29,7 +37,7 @@ class Category:
         """Геттер возвращает строку со всеми продуктами в приватном атрибуте products"""
         product_str = ""
         for product in self.__products:
-            product_str += f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n"
+            product_str += f"{str(product)}\n"
         return product_str
 
     @property
