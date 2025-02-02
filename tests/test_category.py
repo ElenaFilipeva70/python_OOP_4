@@ -1,3 +1,5 @@
+import pytest
+
 from src.category import Category
 from src.product import Product
 
@@ -37,3 +39,10 @@ def test_category_add_product(first_category: Category) -> None:
 def test_category_str(second_category: Category) -> None:
     """Тестируем строковое отображение товаров в категории"""
     assert str(second_category) == "Телевизоры, количество продуктов: 7 шт."
+
+
+def test_category_add_product_invalid(first_category: Category) -> None:
+    """Тестируем поведение метода добавления продукта в атрибут products при попытке добавить вместо
+    продукта другой объект - вызываем ошибку"""
+    with pytest.raises(TypeError):
+        first_category.add_product("Not a product")

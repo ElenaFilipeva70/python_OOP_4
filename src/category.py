@@ -3,6 +3,7 @@ from src.product import Product
 
 class Category:
     """Класс для категорий товаров"""
+
     name: str
     description: str
     __products: list
@@ -36,7 +37,6 @@ class Category:
             Category.products_list.append(product)
         else:
             raise TypeError
-
 
     @property
     def products(self) -> str:
