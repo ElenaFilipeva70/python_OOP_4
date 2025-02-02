@@ -2,6 +2,7 @@ from src.product import Product
 
 
 class Category:
+    """Класс для категорий товаров"""
     name: str
     description: str
     __products: list
@@ -10,6 +11,7 @@ class Category:
     products_list: list = []
 
     def __init__(self, name: str, description: str, products: list):
+        """Конструктор для категории товаров"""
         self.name = name
         self.description = description
         self.__products = products
@@ -28,9 +30,13 @@ class Category:
 
     def add_product(self, product: Product) -> None:
         """Метод для добавления продукта в атрибут products"""
-        self.__products.append(product)
-        Category.product_count += 1
-        Category.products_list.append(product)
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += 1
+            Category.products_list.append(product)
+        else:
+            raise TypeError
+
 
     @property
     def products(self) -> str:
