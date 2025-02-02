@@ -2,12 +2,15 @@ from typing import List
 
 
 class Product:
+    """Класс для хранения товаров"""
+
     name: str
     description: str
     __price: float
     quantity: int
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
+        """Конструктор для товара"""
         self.name = name
         self.description = description
         self.__price = price
@@ -20,7 +23,9 @@ class Product:
 
     def __add__(self, other: "Product") -> float:
         """Метод для получения полной стоимости всех выбранных товаров на складе"""
-        return self.__price * self.quantity + other.__price * other.quantity
+        if type(other) is self.__class__:
+            return self.__price * self.quantity + other.__price * other.quantity
+        raise TypeError
 
     @classmethod
     def new_product(cls, product_dict: dict, products_list: List["Product"]) -> "Product":
