@@ -11,10 +11,12 @@ class ProductIterator:
         self.index = 0
 
     def __iter__(self) -> "ProductIterator":
+        """Метод для получения итератора для перебора"""
         self.index = 0
         return self
 
     def __next__(self) -> Any:
+        """Метод для получения следующего товара в итераторе"""
         if self.index < len(self.category.products_in_list):
             product = self.category.products_in_list[self.index]
             self.index += 1

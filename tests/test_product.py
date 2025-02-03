@@ -1,9 +1,12 @@
 from unittest.mock import patch
 
+import pytest
 from _pytest.capture import CaptureFixture
 
 from src.category import Category
+from src.lawngrass import LawnGrass
 from src.product import Product
+from src.smartphone import Smartphone
 
 
 def test_product_init(product: Product) -> None:
@@ -94,3 +97,10 @@ def test_product_str(product: Product) -> None:
 def test_product_add(product: Product, other_product: Product) -> None:
     """Тестируем метод получения полной стоимости всех выбранных товаров на складе"""
     assert product + other_product == 2580000
+
+
+def test_product_add_invalid(product_smartphone1: Smartphone, product_grass1: LawnGrass) -> None:
+    """Тестируем поведение метода получения полной стоимости всех выбранных товаров при попытке сложить
+    товары из разной категории - вызываем ошибку"""
+    with pytest.raises(TypeError):
+        product_smartphone1 + product_grass1
