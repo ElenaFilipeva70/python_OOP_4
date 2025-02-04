@@ -1,4 +1,5 @@
 from src.category import Category
+from src.order import Order
 from src.product import Product
 from src.smartphone import Smartphone
 
@@ -35,8 +36,9 @@ if __name__ == "__main__":
     print(len(category1.products))
     print(category1.category_count)
     print(category1.product_count)
+    print(category1)
 
-    product4 = Product("55\" QLED 4K", "Фоновая подсветка", 123000.0, 7)
+    product4 = Product('55" QLED 4K', "Фоновая подсветка", 123000.0, 7)
     category2 = Category(
         "Телевизоры",
         "Современный телевизор, который позволяет наслаждаться просмотром, станет вашим другом и помощником",
@@ -50,3 +52,6 @@ if __name__ == "__main__":
 
     print(Category.category_count)
     print(Category.product_count)
+
+    order1 = Order(product1, 2)
+    print(order1)
