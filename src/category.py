@@ -1,7 +1,8 @@
 from src.product import Product
+from src.warehouse import WareHouse
 
 
-class Category:
+class Category(WareHouse):
     """Класс для категорий товаров"""
 
     name: str
