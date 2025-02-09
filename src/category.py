@@ -1,5 +1,6 @@
 from src.product import Product
 from src.warehouse import WareHouse
+from src.exceptions import ZeroQuantityProduct
 
 
 class Category(WareHouse):
@@ -33,9 +34,18 @@ class Category(WareHouse):
     def add_product(self, product: Product) -> None:
         """Метод для добавления продукта в атрибут products"""
         if isinstance(product, Product):
-            self.__products.append(product)
-            Category.product_count += 1
-            Category.products_list.append(product)
+            try:
+                if product.quantity == 0:
+                    raise ZeroQuantityProduct("Попытка добавить товар с нулевым количеством")
+            except ZeroQuantityProduct as e:
+                print(str(e))
+            else:
+                self.__products.append(product)
+                Category.product_count += 1
+                Category.products_list.append(product)
+                print("Товар добавлен успешно")
+            finally:
+                print("Обработка добавления товара завершена")
         else:
             raise TypeError
 
@@ -51,3 +61,15 @@ class Category(WareHouse):
     def products_in_list(self) -> list:
         """Геттер, который возвращает приватный атрибут products в виде списка"""
         return self.__products
+
+    def middle_price(self) -> float:
+        """Метод, который подсчитывает средний ценник всех товаров в данной категории"""
+        quantity_sum = 0
+        price_sum = 0
+        for product in self.__products:
+            price_sum += product.price * product.quantity
+            quantity_sum += product.quantity
+        try:
+            return round(price_sum/quantity_sum, 2)
+        except ZeroDivisionError:
+            return 0

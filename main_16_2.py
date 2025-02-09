@@ -1,16 +1,13 @@
-import os
-
 from src.category import Category
+from src.order import Order
 from src.product import Product
-from src.utils import create_objects_from_json, read_json
+from src.smartphone import Smartphone
 
 if __name__ == "__main__":
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    path_file = os.path.join(base_dir, "data", "products.json")
-
     product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
     product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
-    product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
+    product3 = Smartphone("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14, 90.3, "Note 11", 1024, "Синий")
+    # Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
 
     print(product1.name)
     print(product1.description)
@@ -35,9 +32,11 @@ if __name__ == "__main__":
 
     print(category1.name == "Смартфоны")
     print(category1.description)
+    print(category1.products)
     print(len(category1.products))
     print(category1.category_count)
     print(category1.product_count)
+    print(category1)
 
     product4 = Product('55" QLED 4K', "Фоновая подсветка", 123000.0, 7)
     category2 = Category(
@@ -54,12 +53,5 @@ if __name__ == "__main__":
     print(Category.category_count)
     print(Category.product_count)
 
-    products_data = read_json(path_file)
-    categories_list = create_objects_from_json(products_data)
-
-    print(categories_list)
-    print(categories_list[0].name)
-    print(categories_list[0].products)
-
-    print(categories_list[1].name)
-    print(categories_list[1].products)
+    order1 = Order(product1, 2)
+    print(order1)
