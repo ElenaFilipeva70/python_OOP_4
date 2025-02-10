@@ -17,7 +17,7 @@ def test_product_init(product: Product) -> None:
     assert product.quantity == 5
 
 
-def test_product_new_product_different(first_category: Category) -> None:
+def test_product_new_product_different(capsys: CaptureFixture[str], first_category: Category) -> None:
     """Тестируем метод, который принимает на вход параметры отличного от других наименований товара и возвращает
     созданный объект класса Product"""
     new_product = Product.new_product(
@@ -29,13 +29,19 @@ def test_product_new_product_different(first_category: Category) -> None:
         },
         first_category.products_list,
     )
+    message = capsys.readouterr()
+    assert message.out.strip().split("\n")[-3] == "Товар добавлен успешно"
+    assert message.out.strip().split("\n")[-2] == (
+        "Product (Samsung Galaxy S32 Ultra, 256GB, Серый цвет, 200MP камера," " 180010.0, 5)"
+    )
+    assert message.out.strip().split("\n")[-1] == "Обработка добавления товара завершена"
     assert new_product.name == "Samsung Galaxy S32 Ultra"
     assert new_product.description == "256GB, Серый цвет, 200MP камера"
     assert new_product.price == 180010.0
     assert new_product.quantity == 5
 
 
-def test_product_new_product_identical(first_category: Category) -> None:
+def test_product_new_product_identical(capsys: CaptureFixture[str], first_category: Category) -> None:
     """Тестируем метод, который принимает на вход параметры схожего по наименованию товара и возвращает
     измененный объект класса Product"""
     new_product = Product.new_product(
@@ -47,6 +53,9 @@ def test_product_new_product_identical(first_category: Category) -> None:
         },
         first_category.products_list,
     )
+    message = capsys.readouterr()
+    assert message.out.strip().split("\n")[-2] == "Цена изменена на 180010.0"
+    assert message.out.strip().split("\n")[-1] == "Обработка добавления товара завершена"
     assert new_product.name == "Samsung Galaxy S23 Ultra"
     assert new_product.description == "256GB, Серый цвет, 200MP камера"
     assert new_product.price == 180010.0
@@ -104,3 +113,33 @@ def test_product_add_invalid(product_smartphone1: Smartphone, product_grass1: La
     товары из разной категории - вызываем ошибку"""
     with pytest.raises(TypeError):
         product_smartphone1 + product_grass1
+
+
+def test_product_init_invalid() -> None:
+    """Тестируем поведение конструктора при попытке добавить товар разного класса с нулевым количеством, то есть
+    вызываем исключение ValueError"""
+    with pytest.raises(ValueError) as e1:
+        Product("Бракованный товар", "Неверное количество", 1000.0, 0)
+        assert str(e1.value) == "Товар с нулевым количеством не может быть добавлен"
+    with pytest.raises(ValueError) as e2:
+        Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 0, 98.2, "15", 512, "Gray space")
+        assert str(e2.value) == "Товар с нулевым количеством не может быть добавлен"
+    with pytest.raises(ValueError) as e3:
+        LawnGrass("Газонная трава 2", "Выносливая трава", 450.0, 0, "США", "5 дней", "Темно-зеленый")
+        assert str(e3.value) == "Товар с нулевым количеством не может быть добавлен"
+
+
+def test_product_new_product_invalid(capsys: CaptureFixture[str], first_category: Category) -> None:
+    """Тестируем метод new_product, когда он принимает на вход товар с нулевым количеством - вызываем исключение"""
+    Product.new_product(
+        {
+            "name": "Samsung Galaxy S32 Ultra",
+            "description": "256GB, Серый цвет, 200MP камера",
+            "price": 180010.0,
+            "quantity": 0,
+        },
+        first_category.products_list,
+    )
+    message = capsys.readouterr()
+    assert message.out.strip().split("\n")[-2] == "Попытка добавить товар с нулевым количеством"
+    assert message.out.strip().split("\n")[-1] == "Обработка добавления товара завершена"

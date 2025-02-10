@@ -1,8 +1,8 @@
-from typing import List
+from typing import Any, List
 
 from src.base_product import BaseProduct
-from src.print_mixin import PrintMixin
 from src.exceptions import ZeroQuantityProduct
+from src.print_mixin import PrintMixin
 
 
 class Product(BaseProduct, PrintMixin):
@@ -36,7 +36,7 @@ class Product(BaseProduct, PrintMixin):
         raise TypeError
 
     @classmethod
-    def new_product(cls, product_dict: dict, products_list: List["Product"]) -> "Product":
+    def new_product(cls, product_dict: dict, products_list: List["Product"]) -> Any:
         """Класс-метод, который принимает на вход параметры товара в словаре и возвращает
         созданный объект класса Product"""
         try:

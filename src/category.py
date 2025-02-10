@@ -1,6 +1,6 @@
+from src.exceptions import ZeroQuantityProduct
 from src.product import Product
 from src.warehouse import WareHouse
-from src.exceptions import ZeroQuantityProduct
 
 
 class Category(WareHouse):
@@ -70,6 +70,6 @@ class Category(WareHouse):
             price_sum += product.price * product.quantity
             quantity_sum += product.quantity
         try:
-            return round(price_sum/quantity_sum, 2)
+            return round(price_sum / quantity_sum, 2)
         except ZeroDivisionError:
             return 0
