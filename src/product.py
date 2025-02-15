@@ -1,6 +1,7 @@
-from typing import List
+from typing import Any, List
 
 from src.base_product import BaseProduct
+from src.exceptions import ZeroQuantityProduct
 from src.print_mixin import PrintMixin
 
 
@@ -17,7 +18,10 @@ class Product(BaseProduct, PrintMixin):
         self.name = name
         self.description = description
         self.__price = price
-        self.quantity = quantity
+        if quantity > 0:
+            self.quantity = quantity
+        else:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         super().__init__()
 
     def __str__(self) -> str:
@@ -32,20 +36,29 @@ class Product(BaseProduct, PrintMixin):
         raise TypeError
 
     @classmethod
-    def new_product(cls, product_dict: dict, products_list: List["Product"]) -> "Product":
+    def new_product(cls, product_dict: dict, products_list: List["Product"]) -> Any:
         """Класс-метод, который принимает на вход параметры товара в словаре и возвращает
         созданный объект класса Product"""
-        for product in products_list:
-            if product.name == product_dict["name"]:
-                product.quantity += product_dict["quantity"]
-                if product_dict["price"] > product.price:
-                    product.price = product_dict["price"]
-                return product
-        name = product_dict["name"]
-        description = product_dict["description"]
-        price = product_dict["price"]
-        quantity = product_dict["quantity"]
-        return cls(name, description, price, quantity)
+        try:
+            if product_dict["quantity"] == 0:
+                raise ZeroQuantityProduct("Попытка добавить товар с нулевым количеством")
+        except ZeroQuantityProduct as e:
+            print(str(e))
+        else:
+            for product in products_list:
+                if product.name == product_dict["name"]:
+                    product.quantity += product_dict["quantity"]
+                    if product_dict["price"] > product.price:
+                        product.price = product_dict["price"]
+                    return product
+            name = product_dict["name"]
+            description = product_dict["description"]
+            price = product_dict["price"]
+            quantity = product_dict["quantity"]
+            print("Товар добавлен успешно")
+            return cls(name, description, price, quantity)
+        finally:
+            print("Обработка добавления товара завершена")
 
     @property
     def price(self) -> float:

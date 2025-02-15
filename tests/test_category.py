@@ -1,4 +1,5 @@
 import pytest
+from _pytest.capture import CaptureFixture
 
 from src.category import Category
 from src.product import Product
@@ -28,11 +29,14 @@ def test_category_products_property(first_category: Category) -> None:
     )
 
 
-def test_category_add_product(first_category: Category) -> None:
+def test_category_add_product(capsys: CaptureFixture[str], first_category: Category) -> None:
     """Тестируем метод для добавления продукта в атрибут products"""
     product = Product('55" QLED 4K', "Фоновая подсветка", 123000.0, 7)
     assert len(first_category.products_in_list) == 3
     first_category.add_product(product)
+    message = capsys.readouterr()
+    assert message.out.strip().split("\n")[-2] == "Товар добавлен успешно"
+    assert message.out.strip().split("\n")[-1] == "Обработка добавления товара завершена"
     assert len(first_category.products_in_list) == 4
 
 
@@ -46,3 +50,11 @@ def test_category_add_product_invalid(first_category: Category) -> None:
     продукта другой объект - вызываем ошибку"""
     with pytest.raises(TypeError):
         first_category.add_product("Not a product")
+
+
+def test_category_middle_price(first_category: Category) -> None:
+    """Тестируем метод, который подсчитывает средний ценник всех товаров в данной категории,
+    в том числе и случай, когда в категории нет товаров"""
+    category_empty = Category("Пустая категория", "Категория без продуктов", [])
+    assert first_category.middle_price() == 111629.63
+    assert category_empty.middle_price() == 0
